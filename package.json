@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.10.4",
     "@mui/material": "^5.10.4",
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/elasticsearch": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",

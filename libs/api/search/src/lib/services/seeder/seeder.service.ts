@@ -1,6 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { INDEX_NAME } from '../../constants';
+import { readFileSync } from 'fs';
+import path = require('path');
+import { recipes } from '../../../data/recipes';
 
 @Injectable()
 export class SeederService {
@@ -25,10 +28,21 @@ export class SeederService {
             index: this.indexName,
             mappings: {
                 properties: {
-
+                    Name: { type: 'text' },
+                    url: { type: 'text' },
+                    Description: { type: 'text' },
+                    Author: { type: 'text' },
+                    // Ingredients: { type: '{dynamic_property}' },
+                    // Method: { type: 'text' }[]
                 }
             }
-        })
+        });
+
+        const operations = recipes.flatMap(doc => [{ index: { _index: this.indexName } }, doc]);
+        const bulkResponse = await this.es.bulk({ refresh: true, operations });
+
+        
+
     }
 
 }
