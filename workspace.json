@@ -3,6 +3,7 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
+    "api-search": "libs/api/search",
     "search-data-access": "libs/search/data-access",
     "search-feature": "libs/search/feature",
     "web": "apps/web",

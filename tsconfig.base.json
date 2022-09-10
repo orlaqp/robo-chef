@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@robo-chef/api/search": ["libs/api/search/src/index.ts"],
       "@robo-chef/search/data-access": ["libs/search/data-access/src/index.ts"],
       "@robo-chef/search/feature": ["libs/search/feature/src/index.ts"]
     }
