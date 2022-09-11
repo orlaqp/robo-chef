@@ -1,7 +1,8 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { INDEX_NAME } from './constants';
-import { ElasticSearchService } from './services/elastic-search/elastic-search.service';
+import { RecipesResolver } from './recipe.resolver';
+import { RecipesService } from './services/recipes/recipes.service';
 import { SeederService } from './services/seeder/seeder.service';
 
 @Module({
@@ -12,13 +13,14 @@ import { SeederService } from './services/seeder/seeder.service';
         username: 'elastic',
         password: 'changeme'
       }
-    })
+    }),
   ],
   controllers: [],
   providers: [
-    ElasticSearchService,
+    { useValue: 'recipes', provide: INDEX_NAME },
+    RecipesService,
     SeederService,
-    { useValue: 'recipes', provide: INDEX_NAME }
+    RecipesResolver
   ],
   exports: [],
 })

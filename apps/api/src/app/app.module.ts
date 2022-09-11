@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './configuration';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -12,7 +14,21 @@ import configuration from './configuration';
       isGlobal: true,
       load: [configuration]
     }),
-    ApiSearchModule
+    ApiSearchModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'schema.gql',
+      // transformSchema: schema => upperDirectiveTransformer(schema, 'upper'),
+      // installSubscriptionHandlers: true,
+      // buildSchemaOptions: {
+      //   directives: [
+      //     new GraphQLDirective({
+      //       name: 'upper',
+      //       locations: [DirectiveLocation.FIELD_DEFINITION],
+      //     }),
+      //   ],
+      // },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

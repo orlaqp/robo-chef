@@ -1,8 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { INDEX_NAME } from '../../constants';
-import { readFileSync } from 'fs';
-import path = require('path');
 import { recipes } from '../../../data/recipes';
 
 @Injectable()
@@ -39,10 +37,10 @@ export class SeederService {
         });
 
         const operations = recipes.flatMap(doc => [{ index: { _index: this.indexName } }, doc]);
-        const bulkResponse = await this.es.bulk({ refresh: true, operations });
+        await this.es.bulk({ refresh: true, operations });
 
-        
-
+        const count = await this.es.count({ index: this.indexName })
+        this.logger.log(`${count.count} recipes inserted`);
     }
 
 }
