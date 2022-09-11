@@ -1,5 +1,7 @@
+import { ApolloProvider } from '@apollo/client';
 import styled from '@emotion/styled';
-import { SearchFeature } from '@robo-chef/search/feature';
+import { apolloClient } from '@robo-chef/web/graphql';
+import { SearchFeature } from '@robo-chef/web/search/feature';
 
 const StyledPage = styled.div`
   .page {
@@ -13,9 +15,11 @@ export function Index() {
    * Note: The corresponding styles are in the ./index.@emotion/styled file.
    */
   return (
-    <StyledPage>
-      <SearchFeature />
-    </StyledPage>
+    <ApolloProvider client={apolloClient}>
+      <StyledPage>
+        <SearchFeature />
+      </StyledPage>
+    </ApolloProvider>
   );
 }
 

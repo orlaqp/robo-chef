@@ -5,9 +5,11 @@
     "api": "apps/api",
     "api-config": "libs/api/config",
     "api-search": "libs/api/search",
-    "search-data-access": "libs/search/data-access",
-    "search-feature": "libs/search/feature",
+    "search-data-access": "libs/web/search/data-access",
+    "search-feature": "libs/web/search/feature",
+    "shared-model": "libs/shared/model",
     "web": "apps/web",
-    "web-e2e": "apps/web-e2e"
+    "web-e2e": "apps/web-e2e",
+    "web-graphql": "libs/web/graphql"
   }
 }

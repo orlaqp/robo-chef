@@ -17,8 +17,12 @@
     "paths": {
       "@robo-chef/api/config": ["libs/api/config/src/index.ts"],
       "@robo-chef/api/search": ["libs/api/search/src/index.ts"],
-      "@robo-chef/search/data-access": ["libs/search/data-access/src/index.ts"],
-      "@robo-chef/search/feature": ["libs/search/feature/src/index.ts"]
+      "@robo-chef/shared/model": ["libs/shared/model/src/index.ts"],
+      "@robo-chef/web/graphql": ["libs/web/graphql/src/index.ts"],
+      "@robo-chef/web/search/data-access": [
+        "libs/web/search/data-access/src/index.ts"
+      ],
+      "@robo-chef/web/search/feature": ["libs/web/search/feature/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
