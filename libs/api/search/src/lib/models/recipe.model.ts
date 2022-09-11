@@ -1,19 +1,22 @@
-import { Directive, Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
-@ObjectType({ description: 'recipe ' })
+@ObjectType({ description: 'recipe' })
 export class Recipe {
-  @Field(type => ID)
-  id: string;
+  @Field(type => String)
+  Name: string;
 
-  @Directive('@upper')
-  title: string;
+  @Field(type => String)
+  url: string;
 
   @Field({ nullable: true })
-  description?: string;
+  Description?: string;
 
-  @Field()
-  creationDate: Date;
+  @Field({ nullable: true })
+  Author: string;
 
   @Field(type => [String])
-  ingredients: string[];
+  Ingredients: string[];
+
+  @Field(type => [String])
+  Method: string[];
 }
