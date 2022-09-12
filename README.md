@@ -36,3 +36,8 @@ Root
         - feature (ui implementation for search module)
            
 
+## How to run the app
+
+- Build base image first: `docker build . -t my-base-image:nx-base`
+- Start docker compose: `docker-compose up -d`
+
