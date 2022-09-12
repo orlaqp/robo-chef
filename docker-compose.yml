@@ -119,6 +119,7 @@ services:
       args:
         NODE_ENV: "production"
         BUILD_FLAG: ""
+        GRAPHQL_ENDPOINT: "http://localhost:3333/graphql"
     image: web:nx-dev
     ports:
       - 4200:4200
