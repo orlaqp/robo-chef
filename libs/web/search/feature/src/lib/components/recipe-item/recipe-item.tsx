@@ -18,7 +18,7 @@ export function RecipeItem({ item }: RecipeItemProps) {
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        <Avatar alt={item.Name} />
       </ListItemAvatar>
       <ListItemText
         primary={item.Name}
