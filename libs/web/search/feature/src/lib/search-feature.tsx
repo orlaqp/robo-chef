@@ -28,17 +28,17 @@ export function SearchFeature(props: SearchFeatureProps) {
     variables: { text },
   });
 
-  if (loading) {
-    return (
-      <Alert severity="info">Searching ...</Alert>
-    )
-  }
+  // if (loading) {
+  //   return (
+  //     <Alert severity="info">Searching ...</Alert>
+  //   )
+  // }
 
-  if (error) {
-    return (
-      <Alert severity="error">There was an error while searching</Alert>
-    )
-  }
+  // if (error) {
+  //   return (
+  //     <Alert severity="error">There was an error while searching</Alert>
+  //   )
+  // }
 
   return (
     <StyledSearchFeature>

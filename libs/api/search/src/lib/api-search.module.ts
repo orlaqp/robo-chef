@@ -8,7 +8,7 @@ import { SeederService } from './services/seeder/seeder.service';
 @Module({
   imports: [
     ElasticsearchModule.register({
-      node: 'http://localhost:9200',
+      node: 'http://elasticsearch:9200',
       auth: {
         username: 'elastic',
         password: 'changeme'
