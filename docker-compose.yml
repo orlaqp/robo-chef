@@ -2,91 +2,41 @@ version: '3.7'
 
 services:
 
-  # The 'setup' service runs a one-off script which initializes the
-  # 'logstash_internal' and 'kibana_system' users inside Elasticsearch with the
-  # values of the passwords defined in the '.env' file.
-  #
-  # This task is only performed during the *initial* startup of the stack. On all
-  # subsequent runs, the service simply returns immediately, without performing
-  # any modification to existing users.
-  setup:
-    build:
-      context: apps/elk-stack/setup/
-      args:
-        ELASTIC_VERSION: ${ELASTIC_VERSION}
-    init: true
-    volumes:
-      - setup:/state:Z
-    environment:
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
-      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-    networks:
-      - robo-chef
-    depends_on:
-      - elasticsearch
-
   elasticsearch:
-    build:
-      context: apps/elk-stack/elasticsearch/
-      args:
-        ELASTIC_VERSION: ${ELASTIC_VERSION}
-    # image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.2
+    restart: always
+    ports:
+      - 9200:9200
+      - 9300:9300 
     volumes:
       - ./apps/elk-stack/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - elasticsearch:/usr/share/elasticsearch/data:z
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+    networks:
+      - robo-chef
     environment:
       ES_JAVA_OPTS: -Xms512m -Xmx512m
       # Bootstrap password.
       # Used to initialize the keystore during the initial startup of
       # Elasticsearch. Ignored on subsequent runs.
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      ELASTIC_PASSWORD: 'changeme'
       # Use single node discovery in order to disable production mode and avoid bootstrap checks.
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
-    networks:
-      - robo-chef
-
-  logstash:
-    build:
-      context: apps/elk-stack/logstash/
-      args:
-        ELASTIC_VERSION: ${ELASTIC_VERSION}
-    volumes:
-      - ./apps/elk-stack/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
-      - ./apps/elk-stack/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
-    ports:
-      - "5044:5044"
-      - "50000:50000/tcp"
-      - "50000:50000/udp"
-      - "9600:9600"
-    environment:
-      LS_JAVA_OPTS: -Xms256m -Xmx256m
-      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
-    networks:
-      - robo-chef
-    depends_on:
-      - elasticsearch
-
+    
   kibana:
-    build:
-      context: apps/elk-stack/kibana/
-      args:
-        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    image: docker.elastic.co/kibana/kibana:8.4.2
+    restart: always
+    ports:
+      - 5601:5601 
     volumes:
       - ./apps/elk-stack/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
-    ports:
-      - "5601:5601"
     environment:
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: 'changeme'
     networks:
       - robo-chef
     depends_on:
       - elasticsearch
-  
+
   api:
     container_name: api
     build:
@@ -103,11 +53,17 @@ services:
     environment:
       NODE_ENV: "development"
       PORT: 3333
+      WAIT_BEFORE_HOSTS: 20
+      WAIT_HOSTS: elasticsearch:9200
+      WAIT_HOSTS_TIMEOUT: 60
+      WAIT_SLEEP_INTERVAL: 30
+      WAIT_HOST_CONNECT_TIMEOUT: 30
     networks:
       - robo-chef
     restart: on-failure
     depends_on:
       - elasticsearch
+    command: sh -c "/wait && node ./dist/apps/api/main.js"
 
   web:
     container_name: web
@@ -140,3 +96,4 @@ networks:
 volumes:
   setup:
   elasticsearch:
+  portainer_data:
