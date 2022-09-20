@@ -40,4 +40,5 @@ Root
 
 - Build base image first: `docker build . -t my-base-image:nx-base`
 - Start docker compose: `docker-compose up -d`
+- Navigate to: http://localhost:4200/search
 
